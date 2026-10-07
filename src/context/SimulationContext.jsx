@@ -23,7 +23,9 @@ export const SimulationProvider = ({ children }) => {
   });
   
   // Circuit States
-  const [circuitWires, setCircuitWires] = useState([
+  
+  // Auto Wires Definition
+  const AUTO_WIRES = [
     { id: 'w1', startComp: 'mq2', startPin: 'VCC', endComp: 'esp', endPin: '3V3_1', color: '#ef4444' },
     { id: 'w2', startComp: 'mq2', startPin: 'GND', endComp: 'esp', endPin: 'GND1', color: '#1f2937' },
     { id: 'w3', startComp: 'mq2', startPin: 'A0', endComp: 'esp', endPin: 'A0', color: '#3b82f6' },
@@ -41,7 +43,21 @@ export const SimulationProvider = ({ children }) => {
     { id: 'w15', startComp: 'led_r', startPin: 'K', endComp: 'esp', endPin: 'GND3', color: '#1f2937' },
     { id: 'w16', startComp: 'buzzer', startPin: 'POS', endComp: 'esp', endPin: 'D4', color: '#f97316' },
     { id: 'w17', startComp: 'buzzer', startPin: 'NEG', endComp: 'esp', endPin: 'GND4', color: '#1f2937' }
-  ]);
+  ];
+
+  const [circuitWires, setCircuitWires] = useState([]);
+
+  useEffect(() => {
+    const mode = settings?.experimentMode || 'easy';
+    if (mode === 'easy') {
+      setCircuitWires(AUTO_WIRES);
+    } else if (mode === 'medium') {
+      setCircuitWires(AUTO_WIRES.slice(6));
+    } else {
+      setCircuitWires([]);
+    }
+  }, [settings?.experimentMode]);
+
   const [circuitValidation, setCircuitValidation] = useState({ status: 'validated', missing: [], valid: true, correct: 17, total: 17 });
   const [circuitReady, setCircuitReady] = useState(true);
   
