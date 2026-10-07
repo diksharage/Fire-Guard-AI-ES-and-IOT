@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
+import { SettingsContext } from '../context/SettingsContext';
 import { Thermometer, Wind, Droplets, Brain, Activity, Volume2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const { temperature, smoke, humidity, riskLevel, aiConfidence, buzzerStatus, isRunning, circuitReady, alerts, dismissAlert } = useContext(SimulationContext);
+  const { settings } = useContext(SettingsContext);
+  const prefs = settings?.dashboardPrefs || {};
 
   const getRiskDisplay = () => {
     if (riskLevel === 2) return { text: 'HIGH FIRE RISK', color: 'text-red-500', bg: 'bg-red-900/20', border: 'border-red-500/50' };

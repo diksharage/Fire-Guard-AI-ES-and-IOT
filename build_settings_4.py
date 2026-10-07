@@ -1,4 +1,10 @@
-import { useState, useContext } from 'react';
+import os
+
+def write_file(path, content):
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+layout_code = """import { useState, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Flame, LayoutDashboard, Cpu, FlaskConical, BrainCircuit, Wifi, BarChart3, History, Info, Menu, X, Bell, BookOpen, Settings as SettingsIcon } from 'lucide-react';
 import { SimulationContext } from '../context/SimulationContext';
@@ -184,3 +190,6 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
+"""
+write_file('src/components/Layout.jsx', layout_code)
+print("Updated Layout.jsx")

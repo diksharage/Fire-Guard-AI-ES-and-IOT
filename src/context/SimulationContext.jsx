@@ -1,8 +1,11 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { SettingsContext } from './SettingsContext';
 
 export const SimulationContext = createContext();
 
 export const SimulationProvider = ({ children }) => {
+  const { settings } = useContext(SettingsContext);
+  const isSoundEnabled = settings?.buzzerSound ?? true;
   // Environmental States
   const [temperature, setTemperature] = useState(25);
   const [smoke, setSmoke] = useState(15);

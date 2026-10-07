@@ -1,5 +1,6 @@
 ﻿import React, { useState, useContext, useRef, useEffect } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
+import { SettingsContext } from '../context/SettingsContext';
 import { Cpu, Info, Play, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -105,7 +106,8 @@ export const REQUIRED_CONNECTIONS = [
 ];
 
 const VirtualCircuit = () => {
-  const [wiringMode, setWiringMode] = useState('easy');
+  const { settings } = useContext(SettingsContext);
+  const wiringMode = settings?.experimentMode || 'easy';
   const [autoBuilt, setAutoBuilt] = useState(false);
   const navigate = useNavigate();
 
