@@ -346,7 +346,7 @@ const VirtualCircuit = () => {
 
             {/* ESP8266 (Real Image or realistic fallback) */}
             <g transform={`translate(${components.esp.x}, ${components.esp.y})`} onMouseDown={(e) => handleMouseDown(e, 'esp')} className="cursor-move">
-              <image href="/images/esp8266.jpg" width="200" height="260" preserveAspectRatio="xMidYMid slice" className="drop-shadow-xl rounded" />
+              <image href={`${import.meta.env.BASE_URL}images/esp8266.jpg`} width="200" height="260" preserveAspectRatio="xMidYMid slice" className="drop-shadow-xl rounded" />
               <rect width="200" height="260" fill="none" stroke={selectedComp === 'esp' ? '#F59E0B' : '#000'} strokeWidth="2" rx="4" />
               {/* Interactive overlay pins */}
               {COMPONENT_DEF.esp.pins.map(p => {
@@ -378,7 +378,7 @@ const VirtualCircuit = () => {
 
             {/* DHT11 */}
             <g transform={`translate(${components.dht11.x}, ${components.dht11.y})`} onMouseDown={(e) => handleMouseDown(e, 'dht11')} className="cursor-move">
-              <image href="/images/dht11.jpg" width="60" height="80" preserveAspectRatio="xMidYMid slice" className="drop-shadow-lg rounded" />
+              <image href={`${import.meta.env.BASE_URL}images/dht11.jpg`} width="60" height="80" preserveAspectRatio="xMidYMid slice" className="drop-shadow-lg rounded" />
               <rect width="60" height="80" fill="none" stroke={selectedComp === 'dht11' ? '#F59E0B' : '#0369A1'} strokeWidth="2" rx="4" />
               {COMPONENT_DEF.dht11.pins.map(p => (
                 <g key={p.id} transform={`translate(${p.x}, ${p.y})`} onClick={(e) => handlePinClick(e, 'dht11', p.id)} className="cursor-pointer group">
@@ -407,7 +407,7 @@ const VirtualCircuit = () => {
             {/* Resistors */}
             {['res1', 'res2', 'res3'].map(res => (
               <g key={res} transform={`translate(${components[res].x}, ${components[res].y})`} onMouseDown={(e) => handleMouseDown(e, res)} className="cursor-move">
-                <image href="/images/resistor.jpg" width="80" height="20" preserveAspectRatio="xMidYMid slice" className="drop-shadow-md" />
+                <image href={`${import.meta.env.BASE_URL}images/resistor.jpg`} width="80" height="20" preserveAspectRatio="xMidYMid slice" className="drop-shadow-md" />
                 {COMPONENT_DEF[res].pins.map(p => (
                   <rect key={p.id} x={p.x-5} y={p.y-5} width="10" height="10" fill="#F59E0B" opacity={wiring?.comp===res && wiring?.pin===p.id ? "1" : "0"} className="cursor-pointer hover:opacity-50" onClick={(e) => handlePinClick(e, res, p.id)} />
                 ))}

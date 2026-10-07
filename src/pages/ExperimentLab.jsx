@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
-import { Sliders, Play, Pause, RotateCcw, AlertTriangle, ShieldAlert, Volume2 } from 'lucide-react';
+import { Sliders, Play, Pause, RotateCcw, AlertTriangle, ShieldAlert, Volume2, VolumeX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ExperimentLab = () => {
   const { 
+    isSoundEnabled, setIsSoundEnabled,
     temperature, setTemperature, 
     smoke, setSmoke, 
     humidity, setHumidity,
@@ -60,6 +61,13 @@ const ExperimentLab = () => {
               <RotateCcw size={20} />
             </button>
           )}
+          <button 
+            onClick={() => setIsSoundEnabled(!isSoundEnabled)} 
+            className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors shadow-lg" 
+            title={isSoundEnabled ? "Mute Buzzer" : "Unmute Buzzer"}
+          >
+            {isSoundEnabled ? <Volume2 size={20} className="text-green-400" /> : <VolumeX size={20} className="text-slate-500" />}
+          </button>
         </div>
       </div>
 

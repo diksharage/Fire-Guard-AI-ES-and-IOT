@@ -118,7 +118,7 @@ const Guidelines = () => {
                 <h2 className="text-2xl font-bold text-slate-50 border-b border-slate-700 pb-4">Required Components</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-slate-900 border border-slate-700 p-4 rounded-xl flex gap-4 items-start">
-                    <img src="/images/esp8266.jpg" className="w-20 h-20 object-cover rounded bg-white p-1" alt="ESP8266" onError={(e) => e.target.style.display='none'} />
+                    <img src={`${import.meta.env.BASE_URL}images/esp8266.jpg`} className="w-20 h-20 object-cover rounded bg-white p-1" alt="ESP8266" onError={(e) => e.target.style.display='none'} />
                     <div>
                       <h4 className="font-bold text-slate-50">ESP8266 NodeMCU</h4>
                       <p className="text-xs text-slate-400 mb-2">Main controller. Reads sensors and processes AI.</p>
@@ -126,7 +126,7 @@ const Guidelines = () => {
                     </div>
                   </div>
                   <div className="bg-slate-900 border border-slate-700 p-4 rounded-xl flex gap-4 items-start">
-                    <img src="/images/dht11.jpg" className="w-20 h-20 object-cover rounded bg-white p-1" alt="DHT11" onError={(e) => e.target.style.display='none'} />
+                    <img src={`${import.meta.env.BASE_URL}images/dht11.jpg`} className="w-20 h-20 object-cover rounded bg-white p-1" alt="DHT11" onError={(e) => e.target.style.display='none'} />
                     <div>
                       <h4 className="font-bold text-slate-50">DHT11 Sensor</h4>
                       <p className="text-xs text-slate-400 mb-2">Measures temperature and humidity.</p>
@@ -142,7 +142,7 @@ const Guidelines = () => {
                     </div>
                   </div>
                   <div className="bg-slate-900 border border-slate-700 p-4 rounded-xl flex gap-4 items-start">
-                    <img src="/images/resistor.jpg" className="w-20 h-20 object-cover rounded bg-white p-1" alt="Resistor" onError={(e) => e.target.style.display='none'} />
+                    <img src={`${import.meta.env.BASE_URL}images/resistor.jpg`} className="w-20 h-20 object-cover rounded bg-white p-1" alt="Resistor" onError={(e) => e.target.style.display='none'} />
                     <div>
                       <h4 className="font-bold text-slate-50">LEDs + Resistors</h4>
                       <p className="text-xs text-slate-400 mb-2">Visual indicators. Require 220Ω series resistors.</p>
