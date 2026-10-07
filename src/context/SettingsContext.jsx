@@ -29,8 +29,13 @@ export const SettingsProvider = ({ children }) => {
   };
 
   const [settings, setSettings] = useState(() => {
-    const saved = localStorage.getItem('fireguard_settings');
-    return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+    try {
+      const saved = localStorage.getItem('fireguard_settings');
+      return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+    } catch (e) {
+      console.error("Failed to parse settings from localStorage:", e);
+      return defaultSettings;
+    }
   });
 
   useEffect(() => {
