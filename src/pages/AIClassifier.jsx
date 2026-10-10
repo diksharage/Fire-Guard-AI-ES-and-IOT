@@ -83,6 +83,10 @@ const AIClassifier = () => {
           </div>
         </div>
 
+        {/* Disclaimer */}
+        <div className="md:col-span-3 mt-4 p-4 border border-blue-900/50 bg-blue-900/10 rounded-lg text-sm text-slate-400">
+          <strong>Note:</strong> This decision tree uses simplified simulation/demonstration thresholds to illustrate AI classification logic. It does not claim to represent universal real-world fire-safety standards.
+        </div>
       </div>
     </div>
   );

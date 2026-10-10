@@ -84,6 +84,16 @@ export const SimulationProvider = ({ children }) => {
   
   // App States
   const [isRunning, setIsRunning] = useState(false);
+
+  // Run State Logging
+  useEffect(() => {
+    if (isRunning) {
+      addNotification('system', 'Experiment Started', 'Virtual monitoring is active.');
+    } else {
+      addNotification('system', 'Experiment Paused', 'Virtual monitoring is paused.');
+    }
+  }, [isRunning]);
+
   
   // Derived Hardware States
   const buzzerStatus = isRunning && circuitReady && riskLevel === 2;

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import { SimulationContext } from '../context/SimulationContext';
 import { SettingsContext } from '../context/SettingsContext';
-import { Thermometer, Wind, Droplets, Brain, Activity, Volume2, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Thermometer, Wind, Droplets, BrainCircuit, Activity, Volume2, ShieldAlert } from 'lucide-react';
 
 const Dashboard = () => {
   const { temperature, smoke, humidity, riskLevel, aiConfidence, buzzerStatus, isRunning, circuitReady, notifications } = useContext(SimulationContext);
@@ -18,37 +17,21 @@ const Dashboard = () => {
   const risk = getRiskDisplay();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-50 mb-2">FireGuard AI Dashboard</h1>
           <p className="text-slate-400">Virtual Fire & Smoke Early Warning Laboratory</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <div className="px-4 py-2 bg-slate-800 rounded-lg border border-slate-700 text-sm">
-            System Status: <strong className="text-primary">ONLINE</strong>
+            Mode: <strong className="text-blue-400 uppercase">{settings?.experimentMode || 'EASY'}</strong>
           </div>
           <div className="px-4 py-2 bg-slate-800 rounded-lg border border-slate-700 text-sm">
             Simulation: <strong className={isRunning ? 'text-green-500' : 'text-slate-500'}>{isRunning ? 'RUNNING' : 'PAUSED'}</strong>
           </div>
         </div>
       </div>
-
-      {notifications && notifications.length > 0 && (
-        <div className="glass-card p-4 mb-6 border border-red-900/30">
-          {notifications.slice(0, 2).map(alert => (
-            <div key={alert.id} className={`flex justify-between items-center p-3 rounded bg-slate-900 border-l-4 mb-2 last:mb-0 ${alert.type === 'danger' ? 'border-red-500' : 'border-yellow-500'}`}>
-              <div className="flex flex-col">
-                <span className={`${alert.type === 'danger' ? 'text-red-400' : 'text-yellow-400'} font-semibold`}>{alert.title}</span>
-                <span className="text-slate-300 text-sm">{alert.message}</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-slate-500 text-xs">{new Date(alert.timestamp).toLocaleTimeString()}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Main Status Card */}
       <div className={`glass-card p-8 flex flex-col items-center justify-center text-center transition-colors ${risk.bg} ${risk.border} border-2`}>
@@ -60,52 +43,82 @@ const Dashboard = () => {
       </div>
 
       {/* Sensor Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="glass-card p-5 lg:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {prefs.showTemperature !== false && (
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 text-slate-400 mb-3"><Thermometer /> <span className="font-semibold">Temperature</span></div>
           <div className="text-4xl font-bold text-slate-50">{temperature.toFixed(1)}<span className="text-xl text-slate-500 ml-1">°C</span></div>
         </div>
-        <div className="glass-card p-5 lg:col-span-2">
+        )}
+        
+        {prefs.showSmoke !== false && (
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 text-slate-400 mb-3"><Wind /> <span className="font-semibold">Smoke Level</span></div>
           <div className="text-4xl font-bold text-slate-50">{smoke.toFixed(0)}<span className="text-xl text-slate-500 ml-1">%</span></div>
         </div>
-        <div className="glass-card p-5 lg:col-span-2">
+        )}
+        
+        {prefs.showHumidity !== false && (
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 text-slate-400 mb-3"><Droplets /> <span className="font-semibold">Humidity</span></div>
           <div className="text-4xl font-bold text-slate-50">{humidity.toFixed(0)}<span className="text-xl text-slate-500 ml-1">%</span></div>
         </div>
-        <div className="glass-card p-5 lg:col-span-2">
-          <div className="flex items-center gap-3 text-slate-400 mb-3"><Brain /> <span className="font-semibold">AI Confidence</span></div>
-          <div className="text-4xl font-bold text-primary">{aiConfidence}<span className="text-xl text-slate-500 ml-1">%</span></div>
+        )}
+        
+        {prefs.showAiConfidence !== false && (
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-3 text-slate-400 mb-3"><BrainCircuit /> <span className="font-semibold">AI Confidence</span></div>
+          <div className="text-4xl font-bold text-slate-50">{aiConfidence}%</div>
         </div>
-        <div className="glass-card p-5 lg:col-span-2">
-          <div className="flex items-center gap-3 text-slate-400 mb-3"><Volume2 /> <span className="font-semibold">Buzzer</span></div>
-          <div className={`text-3xl font-bold ${buzzerStatus ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>{buzzerStatus ? 'ON (ALARM)' : 'OFF'}</div>
+        )}
+        
+        {prefs.showBuzzer !== false && (
+        <div className="glass-card p-5">
+          <div className="flex items-center gap-3 text-slate-400 mb-3"><Volume2 /> <span className="font-semibold">Buzzer Status</span></div>
+          <div className={`text-3xl font-bold ${buzzerStatus ? 'text-red-500' : 'text-slate-500'}`}>
+            {buzzerStatus ? 'ALARMING' : 'SILENT'}
+          </div>
         </div>
-        <div className="glass-card p-5 lg:col-span-2">
+        )}
+        
+        {prefs.showIoT !== false && (
+        <div className="glass-card p-5">
           <div className="flex items-center gap-3 text-slate-400 mb-3"><Activity /> <span className="font-semibold">IoT Connection</span></div>
-          <div className={`text-2xl font-bold ${isRunning ? 'text-green-500' : 'text-amber-500'}`}>{isRunning ? 'CONNECTED' : 'STANDBY'}</div>
+          <div className="text-3xl font-bold text-green-500">CONNECTED</div>
+        </div>
+        )}
+      </div>
+
+      {/* Recent Activity Section */}
+      <div className="glass-card p-6 mt-6">
+        <div className="flex items-center gap-2 mb-4 text-slate-300">
+          <ShieldAlert size={20} />
+          <h2 className="text-lg font-bold">Recent Experiment Activity</h2>
+        </div>
+        <div className="space-y-3">
+          {(!notifications || notifications.length === 0) ? (
+            <div className="text-slate-500 text-sm p-4 text-center border border-slate-800 rounded bg-slate-900/50">
+              No recent activity recorded.
+            </div>
+          ) : (
+            notifications.slice(0, 5).map(note => (
+              <div key={note.id} className={`flex justify-between items-center p-3 rounded bg-slate-900/50 border-l-4 ${note.type === 'danger' ? 'border-red-500' : note.type === 'warning' ? 'border-yellow-500' : 'border-blue-500'}`}>
+                <div className="flex flex-col">
+                  <span className={`${note.type === 'danger' ? 'text-red-400' : note.type === 'warning' ? 'text-yellow-400' : 'text-blue-400'} font-semibold text-sm`}>
+                    {note.title}
+                  </span>
+                  <span className="text-slate-300 text-sm">{note.message}</span>
+                </div>
+                <span className="text-slate-500 text-xs whitespace-nowrap ml-4">
+                  {new Date(note.timestamp).toLocaleTimeString()}
+                </span>
+              </div>
+            ))
+          )}
         </div>
       </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Link to="/lab" className="glass-card p-6 flex justify-between items-center hover:bg-slate-800 transition-colors group">
-          <div>
-            <h3 className="text-lg font-bold text-slate-50 mb-1">Experiment Lab</h3>
-            <p className="text-sm text-slate-400">Control temperature & smoke simulation parameters</p>
-          </div>
-          <ArrowRight className="text-slate-500 group-hover:text-primary transition-colors" />
-        </Link>
-        <Link to="/analytics" className="glass-card p-6 flex justify-between items-center hover:bg-slate-800 transition-colors group">
-          <div>
-            <h3 className="text-lg font-bold text-slate-50 mb-1">Sensor Analytics</h3>
-            <p className="text-sm text-slate-400">View real-time sensor graphs</p>
-          </div>
-          <ArrowRight className="text-slate-500 group-hover:text-primary transition-colors" />
-        </Link>
-      </div>
-
     </div>
   );
 };
+
 export default Dashboard;
