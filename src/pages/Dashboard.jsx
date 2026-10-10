@@ -5,7 +5,7 @@ import { Thermometer, Wind, Droplets, Brain, Activity, Volume2, ArrowRight } fro
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { temperature, smoke, humidity, riskLevel, aiConfidence, buzzerStatus, isRunning, circuitReady, alerts, dismissAlert } = useContext(SimulationContext);
+  const { temperature, smoke, humidity, riskLevel, aiConfidence, buzzerStatus, isRunning, circuitReady, notifications } = useContext(SimulationContext);
   const { settings } = useContext(SettingsContext);
   const prefs = settings?.dashboardPrefs || {};
 
@@ -34,18 +34,17 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {alerts.length > 0 && (
-        <div className="space-y-3">
-          {alerts.slice(0, 2).map(alert => (
-            <div key={alert.id} className={`p-4 rounded-xl border flex justify-between items-center ${alert.type === 2 ? 'bg-red-900/30 border-red-700' : 'bg-amber-900/30 border-amber-700'}`}>
-              <div>
-                <div className={`font-bold flex items-center gap-2 ${alert.type === 2 ? 'text-red-400' : 'text-amber-400'}`}>
-                  {alert.type === 2 ? '🚨 FireGuard Alert' : '⚠ FireGuard Alert'} 
-                  <span className="text-xs font-normal text-slate-300">[{alert.time}]</span>
-                </div>
-                <div className="text-sm text-slate-200 mt-1">{alert.message}</div>
+      {notifications && notifications.length > 0 && (
+        <div className="glass-card p-4 mb-6 border border-red-900/30">
+          {notifications.slice(0, 2).map(alert => (
+            <div key={alert.id} className={`flex justify-between items-center p-3 rounded bg-slate-900 border-l-4 mb-2 last:mb-0 ${alert.type === 'danger' ? 'border-red-500' : 'border-yellow-500'}`}>
+              <div className="flex flex-col">
+                <span className={`${alert.type === 'danger' ? 'text-red-400' : 'text-yellow-400'} font-semibold`}>{alert.title}</span>
+                <span className="text-slate-300 text-sm">{alert.message}</span>
               </div>
-              <button onClick={() => dismissAlert(alert.id)} className="text-slate-400 hover:text-slate-50 text-sm bg-slate-800/50 px-3 py-1 rounded">Dismiss</button>
+              <div className="flex items-center gap-4">
+                <span className="text-slate-500 text-xs">{new Date(alert.timestamp).toLocaleTimeString()}</span>
+              </div>
             </div>
           ))}
         </div>

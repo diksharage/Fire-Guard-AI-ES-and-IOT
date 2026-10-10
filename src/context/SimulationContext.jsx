@@ -14,7 +14,28 @@ export const SimulationProvider = ({ children }) => {
   // AI States
   const [riskLevel, setRiskLevel] = useState(0); // 0=NORMAL, 1=WARNING, 2=HIGH RISK
   const [aiConfidence, setAiConfidence] = useState(95);
-  const [alerts, setAlerts] = useState([]);
+  
+  const [notifications, setNotifications] = useState([]);
+  
+  const addNotification = (type, title, message) => {
+    setNotifications(prev => [{
+      id: Date.now().toString() + Math.random().toString(36).substring(7),
+      type,
+      title,
+      message,
+      timestamp: new Date().toISOString(),
+      read: false
+    }, ...prev].slice(0, 50));
+  };
+  
+  const markAllRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
+  
+  const clearNotifications = () => {
+    setNotifications([]);
+  };
+
   
   // History
   const [sensorHistory, setSensorHistory] = useState(() => {
@@ -87,11 +108,13 @@ export const SimulationProvider = ({ children }) => {
       confidence = 95 + Math.random() * 4;
     }
     
-    // Add Alert if risk increases
+    // Add Notification if risk increases
     if (newRisk > riskLevel) {
-      const timestamp = new Date().toLocaleTimeString();
-      let msg = newRisk === 2 ? 'High fire-risk condition detected in simulation.' : 'Smoke/Temp increased. Risk status changed to WARNING.';
-      setAlerts(prev => [{ id: Date.now(), time: timestamp, message: msg, type: newRisk }, ...prev].slice(0, 10));
+      if (newRisk === 2) {
+        addNotification('danger', 'HIGH FIRE RISK', 'High fire-risk condition detected in simulation.');
+      } else if (newRisk === 1) {
+        addNotification('warning', 'WARNING', 'Smoke/Temp increased. Risk status changed to WARNING.');
+      }
     }
     
     setRiskLevel(newRisk);
@@ -125,14 +148,11 @@ export const SimulationProvider = ({ children }) => {
 
   const clearHistory = () => {
     setSensorHistory([]);
-    setAlerts([]);
+    clearNotifications();
     localStorage.removeItem('fireguard_history');
   };
 
-  const dismissAlert = (id) => {
-    setAlerts(prev => prev.filter(a => a.id !== id));
-  };
-
+  
   return (
     <SimulationContext.Provider value={{
       temperature, setTemperature,
@@ -140,7 +160,7 @@ export const SimulationProvider = ({ children }) => {
       humidity, setHumidity,
       riskLevel,
       aiConfidence,
-      alerts, dismissAlert,
+      notifications, addNotification, markAllRead, clearNotifications,
       sensorHistory, clearHistory,
       circuitWires, setCircuitWires,
       circuitValidation, setCircuitValidation,
